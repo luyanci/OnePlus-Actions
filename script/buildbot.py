@@ -3,8 +3,8 @@ import os
 import sys
 from telethon import TelegramClient
 
-API_ID = 8021417460
-API_HASH = "AAGgMqYsBB-PYDm3pBTsCxCK6U1kNke_H1I"
+API_ID = 611335
+API_HASH = "d524b414d21f4d37f08684c1df41ac9c"
 
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
