@@ -11,10 +11,8 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHAT_ID = os.environ.get("CHATID")
 MESSAGE_THREAD_ID = os.environ.get("MESSAGE_THREAD_ID")
 DEVICE = os.environ.get("DEVICE")
-kernelversion = os.environ.get("KernelVer")
 KPM= os.environ.get("KPM")
 lz4kd= os.environ.get("LZ4KD")
-ksuver= os.environ.get("KSUVERSIONS")
 MSG_TEMPLATE = """
 **New Build Published!**
 #{device}
@@ -62,7 +60,38 @@ def check_environ():
             exit(1)
     else:
         MESSAGE_THREAD_ID = None
+    get_versions()
 
+def get_kernel_versions():
+    version=""
+    patchlevel=""
+    sublevel=""
+
+    try:
+        with open("Makefile",'r') as file:
+            for line in file:
+                if line.startswith("VERSION"):
+                    version = line.split('=')[1].strip()
+                elif line.startswith("PATCHLEVEL"):
+                    patchlevel = line.split('=')[1].strip()
+                elif line.startswith("SUBLEVEL"):
+                    sublevel = line.split('=')[1].strip()
+                elif line.startswith("#"): # skip comments
+                    continue
+                else:
+                    break
+    except FileNotFoundError:
+        raise
+    return f"{version}.{patchlevel}.{sublevel}"
+
+def get_versions():
+    global kernelversion,ksuver
+    current_work=os.getcwd()
+    os.chdir(current_work+"/kernel_workspace/kernel_platform/common") #除非next
+    kernelversion=get_kernel_versions()
+    os.chdir(os.getcwd()+"/KernelSU")
+    ksuver=os.popen("echo $(git describe --tags $(git rev-list --tags --max-count=1))-$(git rev-parse --short HEAD)@$(git branch --show-current)").read().strip()
+    os.chdir(current_work)
 
 async def main():
     print("[+] Uploading to telegram")
