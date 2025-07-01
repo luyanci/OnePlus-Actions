@@ -18,23 +18,23 @@ on:
         required: true
         type: choice
         options:
-          - 'oneplus_12'
-          - 'oneplus_ace3_pro'
           - 'oneplus_ace5'
           - 'oneplus_13r'
           - 'oneplus_pad2'
+          - 'oneplus_ace3_pro'
           - 'oneplus_pad_pro'
-          - 'oneplus_11'
+          - 'oneplus_ace_3v'
+          - 'oneplus_12'
           - 'oneplus_12r'
-          - 'oneplus_ace2_pro'
           - 'oneplus_ace3'
           - 'oneplus_open'
-          - 'oneplus_10t'
+          - 'oneplus_ace2_pro'
+          - 'oneplus_11'
           - 'oneplus_11r'
           - 'oneplus_ace2'
           - 'oneplus_ace_pro'
+          - 'oneplus_10t'
           - 'oneplus_10_pro'
-          - 'oneplus_ace_3v'
         default: 'oneplus_12'
       CPUD:
         description: "处理器代号"
