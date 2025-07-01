@@ -20,8 +20,7 @@ MSG_TEMPLATE = """
 kernelver: {kernelversion}
 KsuVersion: {Ksuver}
 KPM: {kpm}
-Lz4kd: {Lz4kd}
-lz4&zstd: {lz4_zstd}
+Lz4kd: {Lz4kd} lz4&zstd: {lz4_zstd}
 ```
 testing for auto push...
 """.strip()
