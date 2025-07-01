@@ -12,6 +12,7 @@ MESSAGE_THREAD_ID = os.environ.get("MESSAGE_THREAD_ID")
 DEVICE = os.environ.get("DEVICE")
 KPM= os.environ.get("KPM")
 lz4kd= os.environ.get("LZ4KD")
+BBR= os.environ.get("BBR")
 MSG_TEMPLATE = """
 **New Build Published!**
 #{device}
@@ -19,7 +20,8 @@ MSG_TEMPLATE = """
 kernelver: {kernelversion}
 KsuVersion: {Ksuver}
 KPM: {kpm}
-Lz4kd: {Lz4kd} lz4&zstd: {lz4_zstd}
+lz4kd: {lz4kd} lz4&zstd: {lz4_zstd}
+BBR: {BBR}
 ```
 十分感谢yc佬对本自动推送bot做出的贡献❤️
 """.strip()
