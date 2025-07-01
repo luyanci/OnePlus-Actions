@@ -33,7 +33,7 @@ def get_caption():
         device=DEVICE,
         kernelversion=kernelversion,
         kpm=KPM,
-        Lz4kd=lz4kd,
+        lz4kd=lz4kd,
         Ksuver=ksuver,
         lz4_zstd=check_lz4_zstd(),
         BBR=BBR,
