@@ -36,6 +36,7 @@ def get_caption():
         Lz4kd=lz4kd,
         Ksuver=ksuver,
         lz4_zstd=check_lz4_zstd(),
+        BBR=BBR,
     )
     if len(msg) > 1024:
         return f"{DEVICE}{kernelversion}"
