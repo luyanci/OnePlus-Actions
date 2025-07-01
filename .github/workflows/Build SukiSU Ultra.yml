@@ -72,13 +72,22 @@ on:
            - 'Close'
        default: 'Open'
       lz4kd:
-       description: "是否启用lz4kd(关闭则启用lz4 + zstd)"
+       description: "是否启用lz4kd(关闭则6.1系列启用lz4 + zstd)"
        required: true
        type: choice
        options:
           - 'Open'
           - 'Close'
        default: 'Close'
+      bbr:
+       description: "是否启用bbr算法(优化上行数据, 对手机日用无太大意义甚至可能负优化)"
+       required: true
+       type: choice
+       options:
+          - 'Open'
+          - 'Close'
+       default: 'Close'
+        
         
 jobs:
   build:
@@ -301,13 +310,15 @@ jobs:
           echo "CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./common/arch/arm64/configs/gki_defconfig
-          # Add BBR
-          echo "CONFIG_TCP_CONG_ADVANCED=y" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_TCP_CONG_BBR=y" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_NET_SCH_FQ=y" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_TCP_CONG_BIC=n" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_TCP_CONG_WESTWOOD=n" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_TCP_CONG_HTCP=n" >> ./common/arch/arm64/configs/gki_defconfig
+          if [ "${{ github.event.inputs.bbr }}" == "Open" ]; then
+            # Add BBR
+            echo "CONFIG_TCP_CONG_ADVANCED=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_TCP_CONG_BBR=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_NET_SCH_FQ=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_TCP_CONG_BIC=n" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_TCP_CONG_WESTWOOD=n" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_TCP_CONG_HTCP=n" >> ./common/arch/arm64/configs/gki_defconfig
+          fi
           if [ "${{ github.event.inputs.lz4kd }}" == "Open" ]; then
             # Add lz4kd
             echo "CONFIG_CRYPTO_LZ4KD=y" >> ./common/arch/arm64/configs/gki_defconfig
@@ -443,6 +454,7 @@ jobs:
           DEVICE: ${{ github.event.inputs.FEIL }}
           KPM: ${{ github.event.inputs.KPM }}
           LZ4KD: ${{ github.event.inputs.lz4kd }}
+          BBR: ${{ github.event.inputs.bbr }}
           KSUVERSIONS: ${{env.KSUVER_STR}}(${{env.KSUVER}})
 
       - name: 📊 Post-build disk check (构建后空间检查)
