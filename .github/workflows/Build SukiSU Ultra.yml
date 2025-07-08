@@ -528,10 +528,11 @@ jobs:
             cd AnyKernel3
             zip -q -r "../${{ steps.set_name.outputs.ARTIFACT_NAME }}.zip" ./*
             cd ..
-            pip3 install telethon
+            pip3 install requests
             python3 ./bot/script/buildbot.py "./${{ steps.set_name.outputs.ARTIFACT_NAME }}.zip"
             echo "✅ 文件已上传到Telegram"
           fi
+          echo "BOT_TOKEN 未提供，已跳过"
         env:
           CHATID: ${{secrets.CHATID}}
           BOT_TOKEN: ${{secrets.BOT_TOKEN}}
