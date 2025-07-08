@@ -420,7 +420,7 @@ jobs:
             cd AnyKernel3
             zip -q -r "../AnyKernel3_SukiSU_Ultra_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip" ./*
             cd ..
-            pip3 install telethon
+            pip3 install requests
             python3 ./bot/script/buildbot.py "./AnyKernel3_SukiSU_Ultra_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"
           fi
         env:

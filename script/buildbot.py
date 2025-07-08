@@ -1,10 +1,8 @@
 import asyncio
 import os
 import sys
-from telethon import TelegramClient
+import requests
 
-API_ID = 611335
-API_HASH = "d524b414d21f4d37f08684c1df41ac9c"
 
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
@@ -66,6 +64,22 @@ def check_environ():
         MESSAGE_THREAD_ID = None
     get_versions()
 
+def send_file(entity:int,file:str,caption:str,reply_to:int,parse_mode:str):
+    api_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendDocument"
+    data = {
+        "chat_id": entity,
+        "parse_mode": parse_mode,
+        "caption": caption,
+        }
+    if reply_to:
+        data["message_thread_id"] = reply_to
+    with open(file,"rb") as file_data:
+        files = {"document": file_data}
+        response = requests.post(api_url,data=data,files=files)
+    if response.status_code != 200:
+        raise Exception(f"Request failed:{response.status_code}.{response.text}")
+    return response.json()
+
 def get_kernel_versions():
     version=""
     patchlevel=""
@@ -117,16 +131,15 @@ async def main():
     print("[+] Logging in Telegram with bot")
     script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
     session_dir = os.path.join(script_dir, "ksubot")
-    async with await TelegramClient(session=session_dir, api_id=API_ID, api_hash=API_HASH).start(bot_token=BOT_TOKEN) as bot:
-        caption = [""] * len(files)
-        caption[-1] = get_caption()
-        print("[+] Caption: ")
-        print("---")
-        print(caption)
-        print("---")
-        print("[+] Sending")
-        await bot.send_file(entity=CHAT_ID, file=files, caption=caption, reply_to=MESSAGE_THREAD_ID, parse_mode="markdown")
-        print("[+] Done!")
+    caption = [""] * len(files)
+    caption[-1] = get_caption()
+    print("[+] Caption: ")
+    print("---")
+    print(caption)
+    print("---")
+    print("[+] Sending")
+    send_file(entity=CHAT_ID, file=files[0], caption=caption, reply_to=MESSAGE_THREAD_ID, parse_mode="markdown")
+    print("[+] Done!")
 
 if __name__ == "__main__":
     try:
