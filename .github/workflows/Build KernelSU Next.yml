@@ -151,7 +151,7 @@ jobs:
            fi
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
            cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
-           cd ../common
+           cd ./common
            if [ "${{ github.event.inputs.KERNEL_VERSION }}" == "6.1" ]; then
              git apply -p1 < 001-lz4.patch || true
              patch -p1 < 002-zstd.patch || true
